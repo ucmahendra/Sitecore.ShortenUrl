@@ -1,2 +1,6 @@
 /packages
 /.vs
+/ShortenUrl/bin
+/ShortenUrl.Application/bin
+/ShortenUrl.Application/obj
+/ShortenUrl/obj
