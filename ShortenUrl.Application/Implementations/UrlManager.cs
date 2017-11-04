@@ -3,6 +3,7 @@ using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using System.Net;
+using ShortenUrl.Application.Models;
 
 namespace ShortenUrl.Application.Implementations
 {
