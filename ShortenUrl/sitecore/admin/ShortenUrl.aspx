@@ -42,15 +42,19 @@
             SqlDataAdapter da = new SqlDataAdapter(cmd);
             DataSet ds = new DataSet();
             da.Fill(ds);
-            gvDepartments.DataSource = ds;
-            gvDepartments.DataBind();
+            gvShortenUrl.DataSource = ds;
+            gvShortenUrl.DataBind();
         }
         catch
         {
  
         }
     }
-
+    protected void gvShortenUrl_PageIndexChanging(object sender, GridViewPageEventArgs e)
+{
+    gvShortenUrl.PageIndex = e.NewPageIndex;
+    FillGrid();
+}
     protected void btnDelete_Click(object sender, EventArgs e)
     {
         try
@@ -84,13 +88,17 @@
 <body>
     <form id="form1" runat="server">
         <div>
-            <asp:textbox id="txtFullUrl" runat="server" />
-            <asp:button runat="server" id="btnShortenUrl" text="Shorten the Url" onclick="btnShortenUrl_OnClick" visible="True" />
-        </div>
-        <asp:hyperlink id="hlUrl" runat="server"></asp:hyperlink>
-
-        <div>
             <table align="center" style="position: relative; top: 20px;">
+                <tr>
+                    <td align="center">
+                        <div>
+                            <asp:textbox id="txtFullUrl" runat="server" />
+                            <asp:button runat="server" id="btnShortenUrl" text="Shorten the Url" onclick="btnShortenUrl_OnClick" visible="True" />
+                        </div>
+                        <br />
+                        <asp:hyperlink id="hlUrl" runat="server"></asp:hyperlink>
+                    </td>
+                </tr>
                 <tr>
                     <td align="center">
                         <br />
@@ -99,12 +107,14 @@
                 </tr>
                 <tr>
                     <td>
-                        <asp:gridview id="gvDepartments" runat="server" autogeneratecolumns="False" showheaderwhenempty="True"
-                            emptydatatext="No Records Found" gridlines="both" cssclass="gv" emptydatarowstyle-forecolor="Red">
+                        <asp:gridview id="gvShortenUrl" allowpaging="true" runat="server" autogeneratecolumns="False" showheaderwhenempty="True"
+                            emptydatatext="No Records Found" gridlines="both" cssclass="gv" emptydatarowstyle-forecolor="Red" pagesize="10" onpageindexchanging="gvShortenUrl_PageIndexChanging">
                         <Columns>
-                            <asp:TemplateField HeaderText="LongUrl">
+                            <asp:TemplateField HeaderText="Long Url">
                                 <ItemTemplate>
-                                    <asp:Label ID="lblCustomerName" runat="server" Text='<%#Eval("LongUrl") %>'></asp:Label>
+
+                                    <asp:HyperLink ID="hlLongUrl" runat="server" NavigateUrl='<%#Eval("LongUrl") %>' Text='<%#Eval("LongUrl") %>'></asp:HyperLink>
+
                                 </ItemTemplate>
                             </asp:TemplateField>
                             <asp:TemplateField HeaderText="Segment">
@@ -136,10 +146,7 @@
             </table>
             <input type="hidden" runat="server" id="hidCustomerID" />
         </div>
-
-
     </form>
-
 </body>
 </html>
 
