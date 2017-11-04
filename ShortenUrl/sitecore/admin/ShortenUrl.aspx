@@ -2,7 +2,7 @@
 
 <%@ import namespace="ShortenUrl.Application" %>
 <%@ import namespace="ShortenUrl.Application.Implementations" %>
-<%@ import namespace="ShortenUrl.Models" %>
+<%@ import namespace="ShortenUrl.Application.Models" %>
 <%@ import namespace="System.Web.UI" %>
 <%@ import namespace="System.Configuration" %>
 <%@ import namespace="System" %>

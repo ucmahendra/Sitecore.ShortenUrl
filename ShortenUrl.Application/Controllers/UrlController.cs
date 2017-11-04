@@ -1,10 +1,9 @@
 ﻿using System.Web.Mvc;
-using ShortenUrl.Application;
 using ShortenUrl.Application.Implementations;
-using ShortenUrl.Models;
+using ShortenUrl.Application.Models;
 using Sitecore.Mvc.Controllers;
 
-namespace ShortenUrl.Controllers
+namespace ShortenUrl.Application.Controllers
 {
     public class UrlController : SitecoreController
     {

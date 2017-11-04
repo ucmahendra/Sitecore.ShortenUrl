@@ -125,8 +125,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\RouteConfig.cs" />
-    <Compile Include="Controllers\UrlController.cs" />
-    <Compile Include="Models\Url.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -143,10 +141,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Web.config" />
-    <Content Include="App_Config\ConnectionStrings.config">
-      <SubType>Designer</SubType>
-    </Content>
-    <Content Include="App_Config\Sitecore.config" />
     <Content Include="Views\MainLayout.cshtml" />
     <Content Include="App_Config\Include\Sitecore.ShortenUrl.config" />
     <None Include="Properties\PublishProfiles\local.pubxml" />
