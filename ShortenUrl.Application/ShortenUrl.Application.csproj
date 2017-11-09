@@ -50,6 +50,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controllers\UrlController.cs" />
+    <Compile Include="Implementations\Shorten.cs" />
     <Compile Include="Implementations\UrlManager.cs" />
     <Compile Include="IUrlManager.cs" />
     <Compile Include="Models\Url.cs" />

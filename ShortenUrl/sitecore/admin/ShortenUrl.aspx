@@ -12,73 +12,41 @@
 
 <!DOCTYPE html>
 <script runat="server">
-     SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["reporting"].ConnectionString);
+     Shorten shorten = new Shorten();
     protected void Page_Load(object sender, EventArgs e) {
+   
+    if (!Sitecore.Context.IsLoggedIn){
+     Response.Redirect("http://" + Request.Url.Host + "/sitecore/login");
+    }
     if (!IsPostBack)
             {
-                FillGrid();
+                shorten.FillGrid(gvShortenUrl);
             }
           }
     private void btnShortenUrl_OnClick(object sender, EventArgs e) {
-        if (Sitecore.Context.IsLoggedIn) {
-                        var _urlManager = new UrlManager ();
-            ShortUrl shortUrl = _urlManager.ShortenUrl(txtFullUrl.Text, Request.UserHostAddress, "");
-            var shortenUrlHostName = Sitecore.Configuration.Settings.GetSetting("ShortenUrlHostName");
-    var tinyUrl = string.Format("{0}://{1}{2}{3}", Request.Url.Scheme, shortenUrlHostName, Page.ResolveUrl("~"), shortUrl.Segment);
-            hlUrl.Text = tinyUrl;
-    hlUrl.NavigateUrl =tinyUrl;
-                    }
-        else {
-            Response.Redirect("http://" + Request.Url.Host + "/sitecore/login");
-        }
+      if (Sitecore.Context.IsLoggedIn)if (!Sitecore.Context.IsLoggedIn){
+     Response.Redirect("http://" + Request.Url.Host + "/sitecore/login");
     }
-    void FillGrid()
-    {
-        try
-        {
-            SqlCommand cmd = new SqlCommand();
-            cmd.CommandText = "Select * from ShortUrl";
-            cmd.Connection = con;
-            SqlDataAdapter da = new SqlDataAdapter(cmd);
-            DataSet ds = new DataSet();
-            da.Fill(ds);
-            gvShortenUrl.DataSource = ds;
-            gvShortenUrl.DataBind();
-        }
-        catch
-        {
- 
-        }
+                var _urlManager = new UrlManager();
+                ShortUrl shortUrl = _urlManager.ShortenUrl(txtFullUrl.Text, Request.UserHostAddress, "");
+                var shortenUrlHostName = Sitecore.Configuration.Settings.GetSetting("ShortenUrlHostName");
+                var tinyUrl = string.Format("{0}://{1}{2}{3}", Request.Url.Scheme, shortenUrlHostName, Page.ResolveUrl("~"), shortUrl.Segment);
+                hlUrl.Text = tinyUrl;
+                hlUrl.NavigateUrl = tinyUrl;
+            
     }
+    
     protected void gvShortenUrl_PageIndexChanging(object sender, GridViewPageEventArgs e)
 {
     gvShortenUrl.PageIndex = e.NewPageIndex;
-    FillGrid();
+    shorten.FillGrid(gvShortenUrl);
 }
     protected void btnDelete_Click(object sender, EventArgs e)
     {
-        try
-        {
-            Button btn = sender as Button;
-            GridViewRow grow = btn.NamingContainer as GridViewRow;
-            SqlCommand cmd = new SqlCommand();
-            cmd.CommandText = "DELETE FROM ShortUrl WHERE Id="+(grow.FindControl("lblId") as Label).Text;
-            cmd.Connection = con;
-            con.Open();
-            cmd.ExecuteNonQuery();
-            con.Close();
-            FillGrid();
-            lblMessage.Text = "Deleted Successfully.";
-        }
-        catch
-        {
- 
-        }
-        finally
-        {
-            if (con.State == ConnectionState.Open)
-                con.Close();
-        }
+     if (!Sitecore.Context.IsLoggedIn){
+     Response.Redirect("http://" + Request.Url.Host + "/sitecore/login");
+    }
+        shorten.ShortenDeleteClick(sender, gvShortenUrl, lblMessage);
     }
 </script>
 <html xmlns="http://www.w3.org/1999/xhtml">
