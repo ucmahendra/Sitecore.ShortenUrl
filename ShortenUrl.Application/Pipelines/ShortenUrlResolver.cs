@@ -1,11 +1,11 @@
 ﻿using System;
-using Sitecore.Diagnostics;
-using Sitecore.Pipelines.HttpRequest;
-using Sitecore;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using System.Net;
+using ShortenUrl.Application.Models;
+using Sitecore.Diagnostics;
+using Sitecore.Pipelines.HttpRequest;
 using Sitecore.StringExtensions;
 
 namespace ShortenUrl.Application.Pipelines
