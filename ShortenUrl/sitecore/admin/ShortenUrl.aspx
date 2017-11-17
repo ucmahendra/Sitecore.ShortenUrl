@@ -56,12 +56,12 @@
 <body>
     <form id="form1" runat="server">
         <div>
-            <table align="center" style="position: relative; top: 20px;">
+            <table align="center" style="position: relative; top: 20px; width: 940px">
                 <tr>
                     <td align="center">
                         <div>
-                            <asp:textbox id="txtFullUrl" runat="server" />
-                            <asp:button runat="server" id="btnShortenUrl" text="Shorten the Url" onclick="btnShortenUrl_OnClick" visible="True" />
+                            <asp:textbox id="txtFullUrl" runat="server" style="width: 450px;height: 30px;"/>
+                            <asp:button runat="server" id="btnShortenUrl" text="Shorten the Url" style="height: 32px;" onclick="btnShortenUrl_OnClick" visible="True" />
                         </div>
                         <br />
                         <asp:hyperlink id="hlUrl" runat="server"></asp:hyperlink>
@@ -76,7 +76,7 @@
                 <tr>
                     <td>
                         <asp:gridview id="gvShortenUrl" allowpaging="true" runat="server" autogeneratecolumns="False" showheaderwhenempty="True"
-                            emptydatatext="No Records Found" gridlines="both" cssclass="gv" emptydatarowstyle-forecolor="Red" pagesize="10" onpageindexchanging="gvShortenUrl_PageIndexChanging">
+                            emptydatatext="No Records Found" gridlines="both" cssclass="gv-shorten-url" emptydatarowstyle-forecolor="Red" pagesize="10" onpageindexchanging="gvShortenUrl_PageIndexChanging">
                         <Columns>
                             <asp:TemplateField HeaderText="Long Url">
                                 <ItemTemplate>
@@ -115,6 +115,12 @@
             <input type="hidden" runat="server" id="hidCustomerID" />
         </div>
     </form>
+    <style type="text/css">
+        .gv-shorten-url {
+            width: 940px;
+        }
+    </style>
 </body>
+
 </html>
 

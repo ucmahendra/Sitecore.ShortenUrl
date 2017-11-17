@@ -32,7 +32,7 @@ namespace ShortenUrl.Application.Pipelines
                 arguments.Context.Response.RedirectPermanent(defaultRedirect);
             }
             string referer = request.UrlReferrer != null ? request.UrlReferrer.ToString() : string.Empty;
-            string ip = request.UserHostAddress;            
+            string ip = request.UserHostAddress;
 
             string longurl = Click(segment, referer, ip);
             longurl = longurl.IsNullOrEmpty() ? defaultRedirect : longurl;
@@ -73,8 +73,6 @@ namespace ShortenUrl.Application.Pipelines
                         throw new Exception();
                     }
 
-                    url.NumOfClicks = url.NumOfClicks + 1;
-
                     Stat stat = new Stat()
                     {
                         ClickDate = DateTime.Now,
@@ -83,18 +81,21 @@ namespace ShortenUrl.Application.Pipelines
                         ShortUrl = url
                     };
 
-                    //ctx.Stats.Add(stat);
+                    SqlCommand updateCommand = new SqlCommand("get_OneShortUrl_By_Segment", con)
+                    {
+                        CommandType = CommandType.StoredProcedure
+                    };
+                    updateCommand.Parameters.AddWithValue("@Segment", url.NumOfClicks + 1);
 
-                    //ctx.SaveChanges();
+                    updateCommand.ExecuteNonQuery();
 
-                    /* TODO: Create stored procedure to save in stats table */
-
+                    con.Close();
                     return stat.ShortUrl.LongUrl;
                 }
             }
             catch (Exception)
             {
-                return string.Empty;                
+                return string.Empty;
             }
         }
 
