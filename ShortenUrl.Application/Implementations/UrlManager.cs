@@ -9,9 +9,14 @@ namespace ShortenUrl.Application.Implementations
 {
     public class UrlManager : IUrlManager
     {
+        public string connectionString { get; set; }
+        public UrlManager()
+        {
+            var databaseName = Sitecore.Configuration.Settings.GetSetting("DatabaseName");
+            connectionString = ConfigurationManager.ConnectionStrings[databaseName].ConnectionString;
+        }
         public ShortUrl ShortenUrl(string longUrl, string ip, string segment = "")
         {
-            string connectionString = ConfigurationManager.ConnectionStrings["reporting"].ConnectionString;
             using (SqlConnection con = new SqlConnection(connectionString))
             {
                 ShortUrl url = new ShortUrl();
@@ -59,31 +64,7 @@ namespace ShortenUrl.Application.Implementations
                         throw new Exception();
                     }
 
-                    //int cap = 0;
-                    //               string capString = ""; //ConfigurationManager.AppSettings["MaxNumberShortUrlsPerHour"];
-                    //int.TryParse(capString, out cap);
-                    //DateTime dateToCheck = DateTime.Now.Subtract(new TimeSpan(1, 0, 0));
-                    //int count = ctx.ShortUrls.Where(u => u.Ip == ip && u.Added >= dateToCheck).Count();
-                    //if (cap != 0 && count > cap)
-                    //{
-                    //	throw new ArgumentException("Your hourly limit has exceeded");
-                    //}
-
-                    //if (!string.IsNullOrEmpty(segment))
-                    //{
-                    //	if (ctx.ShortUrls.Where(u => u.Segment == segment).Any())
-                    //	{
-                    //		throw new Exception();
-                    //	}
-                    //	if (segment.Length > 20 || !Regex.IsMatch(segment, @"^[A-Za-z\d_-]+$"))
-                    //	{
-                    //		throw new ArgumentException("Malformed or too long segment");
-                    //	}
-                    //}
-                    //else
-                    //{
                     segment = this.NewSegment();
-                    //}
 
                     if (string.IsNullOrEmpty(segment))
                     {
@@ -126,8 +107,7 @@ namespace ShortenUrl.Application.Implementations
         }
 
         private string NewSegment()
-        {            
-            string connectionString = ConfigurationManager.ConnectionStrings["reporting"].ConnectionString;
+        {
             using (SqlConnection con = new SqlConnection(connectionString))
             {
                 int i = 0;
@@ -144,7 +124,7 @@ namespace ShortenUrl.Application.Implementations
                     try
                     {
                         SqlDataReader reader = command.ExecuteReader();
-                        
+
                         if (!reader.HasRows)
                         {
                             return segment;
@@ -164,7 +144,7 @@ namespace ShortenUrl.Application.Implementations
                     finally
                     {
                         con.Close();
-                    }                   
+                    }
                 }
                 return string.Empty;
             }

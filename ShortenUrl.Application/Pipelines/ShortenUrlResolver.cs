@@ -15,7 +15,6 @@ namespace ShortenUrl.Application.Pipelines
         public override void Process(HttpRequestArgs arguments)
         {
             Assert.ArgumentNotNull((object)arguments, "arguments");
-
             if (arguments.LocalPath.ToLower().Contains("/notfound"))
                 return;
 
@@ -43,7 +42,8 @@ namespace ShortenUrl.Application.Pipelines
         {
             try
             {
-                string connectionString = ConfigurationManager.ConnectionStrings["reporting"].ConnectionString;
+                var databaseName = Sitecore.Configuration.Settings.GetSetting("DatabaseName");
+                string connectionString = ConfigurationManager.ConnectionStrings[databaseName].ConnectionString;
                 using (SqlConnection con = new SqlConnection(connectionString))
                 {
                     ShortUrl url = new ShortUrl();
@@ -57,7 +57,6 @@ namespace ShortenUrl.Application.Pipelines
 
                     SqlDataReader reader = command.ExecuteReader();
 
-                    // Call Read before accessing data. 
                     while (reader.Read())
                     {
                         url.Id = int.Parse(String.Format("{0}", reader[0]));
@@ -73,24 +72,16 @@ namespace ShortenUrl.Application.Pipelines
                         throw new Exception();
                     }
 
-                    Stat stat = new Stat()
-                    {
-                        ClickDate = DateTime.Now,
-                        Ip = ip,
-                        Referer = referer,
-                        ShortUrl = url
-                    };
-
-                    SqlCommand updateCommand = new SqlCommand("get_OneShortUrl_By_Segment", con)
+                    SqlCommand updateCommand = new SqlCommand("update_In_ShortUrl", con)
                     {
                         CommandType = CommandType.StoredProcedure
                     };
-                    updateCommand.Parameters.AddWithValue("@Segment", url.NumOfClicks + 1);
-
+                    updateCommand.Parameters.AddWithValue("@NumOfClicks", url.NumOfClicks + 1);
+                    updateCommand.Parameters.AddWithValue("@Segment", segment);
                     updateCommand.ExecuteNonQuery();
 
                     con.Close();
-                    return stat.ShortUrl.LongUrl;
+                    return url.LongUrl;
                 }
             }
             catch (Exception)

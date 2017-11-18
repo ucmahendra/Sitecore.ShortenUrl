@@ -6,14 +6,14 @@
 <%@ import namespace="System.Web.UI" %>
 <%@ import namespace="System.Configuration" %>
 <%@ import namespace="System" %>
-<%@ import namespace="System.Data" %>
-<%@ import namespace="System.Data.SqlClient" %>
 <%@ import namespace="System.Net" %>
 
 <!DOCTYPE html>
 <script runat="server">
      Shorten shorten = new Shorten();
-    protected void Page_Load(object sender, EventArgs e) {
+   string shortenUrlHostName = Sitecore.Configuration.Settings.GetSetting("ShortenUrlHostName");
+
+     protected void Page_Load(object sender, EventArgs e) {
    
     if (!Sitecore.Context.IsLoggedIn){
      Response.Redirect("http://" + Request.Url.Host + "/sitecore/login");
@@ -29,7 +29,7 @@
     }
                 var _urlManager = new UrlManager();
                 ShortUrl shortUrl = _urlManager.ShortenUrl(txtFullUrl.Text, Request.UserHostAddress, "");
-                var shortenUrlHostName = Sitecore.Configuration.Settings.GetSetting("ShortenUrlHostName");
+                
                 var tinyUrl = string.Format("{0}://{1}{2}{3}", Request.Url.Scheme, shortenUrlHostName, Page.ResolveUrl("~"), shortUrl.Segment);
                 hlUrl.Text = tinyUrl;
                 hlUrl.NavigateUrl = tinyUrl;
@@ -48,6 +48,7 @@
     }
         shorten.ShortenDeleteClick(sender, gvShortenUrl, lblMessage);
     }
+  
 </script>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head id="Head1" runat="server">
@@ -60,7 +61,7 @@
                 <tr>
                     <td align="center">
                         <div>
-                            <asp:textbox id="txtFullUrl" runat="server" style="width: 450px;height: 30px;"/>
+                            <asp:textbox id="txtFullUrl" runat="server" style="width: 450px; height: 30px;" />
                             <asp:button runat="server" id="btnShortenUrl" text="Shorten the Url" style="height: 32px;" onclick="btnShortenUrl_OnClick" visible="True" />
                         </div>
                         <br />
@@ -81,33 +82,33 @@
                             <asp:TemplateField HeaderText="Long Url">
                                 <ItemTemplate>
 
-                                    <asp:HyperLink ID="hlLongUrl" runat="server" NavigateUrl='<%#Eval("LongUrl") %>' Text='<%#Eval("LongUrl") %>'></asp:HyperLink>
+                                    <asp:HyperLink target="_blank" ID="hlLongUrl" runat="server" NavigateUrl='<%#Eval("LongUrl") %>' Text='<%#Eval("LongUrl") %>'></asp:HyperLink>
 
                                 </ItemTemplate>
                             </asp:TemplateField>
-                            <asp:TemplateField HeaderText="Segment">
+                            <asp:TemplateField HeaderText="Short Url">
                                 <ItemTemplate>
-                                    <asp:Label ID="lblSegment" runat="server" Text='<%#Eval("Segment") %>'></asp:Label>
-                                </ItemTemplate>
+                                    <asp:HyperLink target="_blank" ID="hlShortUrl" runat="server" NavigateUrl='<%#Request.Url.Scheme+"://"+shortenUrlHostName+"/"+Eval("Segment")%>' Text='<%#Request.Url.Scheme+"://"+shortenUrlHostName+"/"+Eval("Segment")%>'></asp:HyperLink>
+                                 </ItemTemplate>
                             </asp:TemplateField>
                             <asp:TemplateField HeaderText="IP Address">
-                                <ItemTemplate>
-                                    <asp:Label ID="lblAddress" runat="server" Text='<%#Eval("Ip") %>'></asp:Label>
+                                <ItemTemplate>                                    
+                                    <asp:Label ID="lblAddress" runat="server" Text='<%#Eval("Ip")%>'></asp:Label>
                                 </ItemTemplate>
                             </asp:TemplateField>
                              <asp:TemplateField HeaderText="Number Of Click">
                                 <ItemTemplate>
-                                    <asp:Label ID="lblNumClick" runat="server" Text='<%#Eval("NumOfClicks") %>'></asp:Label>
+                                    <asp:Label ID="lblNumClick" runat="server" Text='<%#Eval("NumOfClicks")%>'></asp:Label>
                                 </ItemTemplate>
                             </asp:TemplateField>
-                            <asp:TemplateField HeaderText="Action">
+                            <asp:TemplateField HeaderText="Delete">
                                 <ItemTemplate>
                                     <asp:Button ID="btnDelete" runat="server" Text="Delete" OnClientClick="return confirm('Are you sure? want to delete the department.');"
                                         OnClick="btnDelete_Click" />
-                                    <asp:Label ID="lblId" runat="server" Text='<%#Eval("id") %>' Visible="false"></asp:Label>
+                                    <asp:Label ID="lblId" runat="server" Text='<%#Eval("id")%>' Visible="false"></asp:Label>
                                 </ItemTemplate>
                             </asp:TemplateField>
-                        </Columns>
+                                                   </Columns>
                     </asp:gridview>
                     </td>
                 </tr>

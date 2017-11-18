@@ -57,7 +57,6 @@
     <Compile Include="Pipelines\ShortenUrlResolver.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Models\ShortUrl.cs" />
-    <Compile Include="Models\Stat.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

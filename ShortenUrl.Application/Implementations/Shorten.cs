@@ -1,24 +1,19 @@
-﻿using ShortenUrl.Application.Models;
-using System;
-using System.Collections.Generic;
-using System.Configuration;
+﻿using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Web.UI.WebControls;
-using ShortenUrl.Application;
-using ShortenUrl.Application.Implementations;
-using System.Web.UI;
-using System.Net;
-using System.Web;
 
 namespace ShortenUrl.Application.Implementations
 {
     public class Shorten
     {
-        SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["reporting"].ConnectionString);
+        private SqlConnection con { get; set; }
+        public Shorten()
+        {
+            var databaseName = Sitecore.Configuration.Settings.GetSetting("DatabaseName");
+            con = new SqlConnection(ConfigurationManager.ConnectionStrings[databaseName].ConnectionString);
+        }
+
         public void FillGrid(GridView gvShortenUrl)
         {
             try
